@@ -24,14 +24,15 @@ func main() {
 
 	lis, err := net.Listen("tcp", *addr)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
 	srv := helloService{}
 	pb.RegisterHelloServiceServer(s, srv)
+	log.Printf("Listen on %v\n", *addr)
 	err = s.Serve(lis)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to serve: %v", err)
 	}
 }
