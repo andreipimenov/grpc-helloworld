@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -11,12 +10,14 @@ import (
 	"github.com/andreipimenov/grpc-helloworld/pb"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type helloService struct{}
 
 func (h helloService) Hello(context.Context, *pb.HelloRequest) (*pb.HelloResponse, error) {
-	return &pb.HelloResponse{}, errors.New("not implemented")
+	return &pb.HelloResponse{}, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func main() {
