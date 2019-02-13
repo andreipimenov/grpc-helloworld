@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 
@@ -19,10 +20,10 @@ func (h helloService) Hello(context.Context, *pb.HelloRequest) (*pb.HelloRespons
 }
 
 func main() {
-	addr := flag.String("addr", ":8080", "address")
+	port := flag.Int("p", 8080, "port")
 	flag.Parse()
 
-	lis, err := net.Listen("tcp", *addr)
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -30,7 +31,7 @@ func main() {
 	s := grpc.NewServer()
 	srv := helloService{}
 	pb.RegisterHelloServiceServer(s, srv)
-	log.Printf("Listen on %v\n", *addr)
+	log.Printf("Listen on %v\n", fmt.Sprintf(":%d", *port))
 	err = s.Serve(lis)
 	if err != nil {
 		log.Fatalf("Failed to serve: %v", err)
